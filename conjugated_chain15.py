@@ -4,12 +4,8 @@ Zigzag nanoribbon two cells wide
 
 from nano import *
 
-ZIGZAG2 = r"""
-   A-B     C
-  /   \   /
- o     o-o
-  \   /   \
-   A B     C
+CONJUGATED_CHAIN15 = r"""
+o-o=o-o=o-o=o-o=o-o=o-o=o-o=o
 """
 
 dx = 0.142*units.nanometre
@@ -18,7 +14,6 @@ dy = 0.142*units.nanometre
 B = 0*units.tesla
 flux_per_plaquette = dx*dy*B
 
-num_atoms, dimension, bonds, atoms = parse_diagram(ZIGZAG2)
+num_atoms, dimension, bonds, atoms = parse_diagram(CONJUGATED_CHAIN15)
 h_poly = compute_hamiltonian(num_atoms, atoms, bonds, flux_per_plaquette)
-h = eval_hamiltonian(num_atoms, h_poly, (1, 1))
-display_band_structure_1d(num_atoms, h_poly)
+display_energy_levels_0d(CONJUGATED_CHAIN15, num_atoms, atoms, h_poly)

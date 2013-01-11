@@ -9,6 +9,7 @@ import matplotlib.pyplot
 import math
 import sys
 import operator
+import units
 
 diagram = r"""
        o-o
@@ -505,7 +506,7 @@ def parse_diagram(diagram):
 
     return (num_atoms, dimension, bonds, atoms)
 
-def compute_hamiltonian(num_atoms, atoms, bonds, b = 0):
+def compute_hamiltonian(num_atoms, atoms, bonds, flux_per_plaquette = 0):
     """
     Compute Hamiltonian for given graph.
     If it's periodic it computes the Hamiltonian as a polynomial
@@ -528,8 +529,9 @@ def compute_hamiltonian(num_atoms, atoms, bonds, b = 0):
 
         # print "a-a ((",atom0, atom1,"))"
         # print (i0,j0),"->",(i1,j1)
-        area = 0.5*(i1-i0)*(j0+j1)
-        mag_angle = b*area
+        plaquettes = 0.5*(i1-i0)*(j0+j1)
+        # print "plaquettes=",plaquettes
+        mag_angle = flux_per_plaquette*plaquettes*units.electron_charge/units.hbar
         mag_phase = numpy.exp(1j*mag_angle)
         # print "area=",area
         # print "magangle=",mag_angle
@@ -562,6 +564,7 @@ def eigensystem(mat):
     results sorted in increasing order of eignevalue.
     """
     e, v = numpy.linalg.eig(mat)
+    e = numpy.abs(e)
 
     items = zip(e, v.T)
     items = sorted(items, key = operator.itemgetter(0))
