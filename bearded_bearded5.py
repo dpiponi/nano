@@ -1,5 +1,5 @@
 """
-Zigzag nanoribbon two cells wide
+Doubly bearded ribbon.
 """
 
 from nano import *

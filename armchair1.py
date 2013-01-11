@@ -1,5 +1,6 @@
 """
 Armchair nanoribbon one cell wide
+Compare http://en.wikipedia.org/wiki/Graphene_nanoribbons
 """
 
 from nano import *

@@ -1,5 +1,6 @@
 """
-Zigzag nanoribbon two cells wide
+Zigzag nanoribbon two cells wide.
+Compare http://en.wikipedia.org/wiki/Graphene_nanoribbons
 """
 
 from nano import *
