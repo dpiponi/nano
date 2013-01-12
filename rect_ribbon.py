@@ -44,4 +44,5 @@ for k in range(-n/2, n/2):
 matplotlib.pyplot.subplot(17,1,1)
 for i in range(num_atoms):
     matplotlib.pyplot.plot(x, y[i])
+
 matplotlib.pyplot.show()

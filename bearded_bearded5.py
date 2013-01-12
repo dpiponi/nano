@@ -3,6 +3,7 @@ Doubly bearded ribbon.
 """
 
 from nano import *
+import matplotlib
 
 BEARDED_BEARDED5 = r"""
        A-B     C-D     E-F
@@ -12,13 +13,9 @@ BEARDED_BEARDED5 = r"""
        A B     C D     E F
 """
 
-dx = 0.142*units.nanometre
-dy = 0.142*units.nanometre
-
-B = 0*units.tesla
-flux_per_plaquette = dx*dy*B
-
 num_atoms, dimension, bonds, atoms = parse_diagram(BEARDED_BEARDED5)
-h_poly = compute_hamiltonian(num_atoms, atoms, bonds, flux_per_plaquette)
+h_poly = compute_hamiltonian(num_atoms, atoms, bonds, 0)
 h = eval_hamiltonian(num_atoms, h_poly, (1, 1))
 display_band_structure_1d(num_atoms, h_poly)
+
+matplotlib.pyplot.show()

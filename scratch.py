@@ -13,6 +13,425 @@ import sys
 import operator
 import units
 
+diagram = r"""
+       o-o
+      /   \
+     o     o-o
+      \   /   \
+       o-o     o
+      /   \   /
+     o     o-o
+      \   /
+       o-o
+"""
+
+diagram = r"""
+       o-o
+      /   \
+   o-o     o-o
+  /   \   /   \
+ o     o-o     o
+  \   /   \   /
+   o-o     o-o
+      \   /
+       o-o
+"""
+
+diagram = r"""
+o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o
+"""
+
+diagram = r"""
+       o-o
+      /   \
+     o     o
+      \   /
+       o-o
+"""
+
+diagram = r"""
+o-o=o-o=o-o=o-o=o-o=o-o=o-o=o
+"""
+
+diagram = r"""
+          o-o
+         /   \
+      o-o     o-o
+     /   \   /   \
+  o-o     o-o     o-o
+ /   \   /   \   /   \
+o     o-o     o-o     o
+ \   /   \   /   \   /
+  o-o     o-o     o-o
+"""
+
+diagram = r"""
+      o-o
+     /   \
+  o-o     o-o
+ /   \   /   \
+o     o-o     o-o
+ \   /   \   /   \
+  o-o     o-o     o
+     \   /   \   /
+      o-o     o-o
+         \   /
+          o-o
+"""
+
+diagram = r"""
+          A-o
+         /   \
+      C-o     A
+     /   \
+  E-o     C
+     \
+      E
+"""
+
+diagram = r"""
+      o-o
+     /   \
+    A     o-A
+     \   /
+      o-o
+"""
+
+diagram = r"""
+      o-o
+     /   \
+    A     o-A
+     \   /
+      B-o     B
+         \   /
+          o-o
+"""
+
+diagram = r"""
+      o-o
+     /   \
+    A     o-A
+     \   /
+      o-o
+     /   \
+    B     o-B
+     \   /
+      o-o
+"""
+
+diagram = r"""
+    A-B
+   /   \
+  o     o
+   \   /
+    A B
+"""
+
+diagram = r"""
+    A-B     C-D
+   /   \   /   \
+  o     o-o     o
+   \   /   \   /
+    A B     C D
+"""
+
+diagram = r"""
+    A-B     C-D     E-F     G-H
+   /   \   /   \   /   \   /   \
+  o     o-o     o-o     o-o     o
+   \   /   \   /   \   /   \   /
+    A B     C D     E F     G H
+"""
+
+diagram = r"""
+    A-B     C-D     E-F     G-H     I-J
+   /   \   /   \   /   \   /   \   /   \
+  o     o-o     o-o     o-o     o-o     o
+   \   /   \   /   \   /   \   /   \   /
+    o-o     o-o     o-o     o-o     o-o
+   /   \   /   \   /   \   /   \   /   \
+  o     o-o     o-o     o-o     o-o     o
+   \   /   \   /   \   /   \   /   \   /
+    A B     C D     E F     G H     I J
+"""
+
+diagram = r"""
+    A-B     C-D     E-F     G-H     I-J
+   /   \   /   \   /   \   /   \   /   \
+  o     o-o     o-o     o-o     o-o     o
+   \   /   \   /   \   /   \   /   \   /
+    A B     C D     E F     G H     I J
+"""
+
+diagram = r"""
+    A-B     C-D     E-F     G-H     I-J
+   /   \   /   \   /   \   /   \   /   \
+  o     o-o     o-o     o-o     o-o     o
+   \   /   \   /           \   /   \   /
+    o-o     o-o             o-o     o-o
+   /   \   /   \           /   \   /   \
+  o     o-o     o-o     o-o     o-o     o
+   \   /   \   /   \   /   \   /   \   /
+    A B     C D     E F     G H     I J
+"""
+
+diagram = r"""
+    A-B     C-D     E-F
+   /   \   /   \   /   \
+  o     o-o     o-o     o-o
+   \   /   \   /   \   /   \
+    o-o     o-o     o-o     o-o
+       \   /   \   /   \   /   \
+        o-o     o-o     o-o     o-o
+           \   /   \   /   \   /   \
+            o-o     o-o     o-o     o-o
+               \   /   \   /   \   /   \
+                o-o     o-o     o-o     o
+                   \   /   \   /   \   /
+                    A B     C D     E F
+"""
+
+diagram = r"""
+      o-o
+     /   \
+    A     o-A
+     \   /
+      o-o
+     /   \
+    C     o-C
+     \   /
+      D-o     D
+         \   /
+          o-o
+"""
+
+diagram = r"""
+       o-o
+      /   \
+     o     o-o
+      \   /   \
+       o-o     o
+          \   /
+           o-o
+"""
+
+diagram = r"""
+
+  o-o-o-o
+
+"""
+
+diagram = r"""
+      o-o
+     /   \
+    A     o-A
+     \   /
+      o-o
+     /   \
+    C     o-C
+     \   /
+      D-o     D
+         \   /
+          o-o
+"""
+
+diagram = r"""
+      o-o
+     /   \
+  o-o     o-o
+ /   \   /   \
+o     o-o     o
+ \   /   \   /
+  o-o     o-o
+ /   \   /   \
+o     o-o     o
+ \   /   \   /
+  o-o     o-o
+     \   /
+      o-o
+"""
+
+diagram = r"""
+       A
+       |
+       o   o
+      / \ / \
+     o   o   o
+     |   |   |
+     o   o   o
+      \ / \ /
+       A   o
+"""
+
+diagram = r"""
+   A       B
+   |       |
+   o   o   o   o   o
+  / \ / \ / \ / \ / \
+ o   o   o   o   o   o
+ |   |   |   |   |   |
+ o   o   o   o   o   o
+  \ / \ / \ / \ / \ /
+   o   A   o   B   o
+"""
+
+diagram = r"""
+    A                 F
+   /                   \
+  o     o-o             o-o
+   \   /   \               \
+    o-o     o-o     o-o     o-o
+       \       \   /   \       \
+        o-o     o-o     o-o     o-o
+           \       \       \   /   \
+            o-o     o-o     o-o     o-o
+               \   /   \   /           \
+                o-o     o-o             o
+                   \                   /
+                    A                 F
+"""
+
+diagram = r"""
+    A-B     C
+   /   \   /
+  o     o-o
+   \   /   \
+    A B     C
+"""
+
+diagram = r"""
+o-o=o-o=o-o=o-o=o-o=o-o=o-o=o
+"""
+
+ZIGZAG1 = r"""
+   A-B
+  /   \
+ o     o
+  \   /
+   A B
+"""
+
+ZIGZAG2 = r"""
+   A-B     C
+  /   \   /
+ o     o-o
+  \   /   \
+   A B     C
+"""
+
+ZIGZAG5 = r"""
+    A-B     C-D     E-F
+   /   \   /   \   /   \
+  o     o-o     o-o     o
+   \   /   \   /   \   /
+    A B     C D     E F
+"""
+
+ARMCHAIR1 = r"""
+   A   B
+   |   |
+   o   o
+    \ /
+     o
+     |
+     o
+    / \
+   A   B
+"""
+
+ARMCHAIR2 = r"""
+   A   B
+   |   |
+   o   o
+    \ / \
+     o   o
+     |   |
+     o   o
+    / \ /
+   A   B
+"""
+
+ARMCHAIR3 = r"""
+   A   B   C
+   |   |   |
+   o   o   o
+    \ / \ /
+     o   o
+     |   |
+     o   o
+    / \ / \
+   A   B   C
+"""
+
+BEARDED_ZIGZAG2 = r"""
+     A-B     C
+    /   \   /
+ o-o     o-o
+    \   /   \
+     A B     C
+"""
+
+BEARDED_BEARDED5 = r"""
+       A-B     C-D     E-F
+      /   \   /   \   /   \
+   o-o     o-o     o-o     o-o
+      \   /   \   /   \   /
+       A B     C D     E F
+"""
+
+INTERFACE = r"""
+o-o=o-o=o-o=o-o=o=o-o=o-o=o-o=o
+"""
+
+GRID23 = r"""
+  o-o     o-o  
+ /   \   /   \ 
+o     o-o     o
+ \   /   \   / 
+  o-o     o-o  
+ /   \   /   \ 
+o     o-o     o
+ \   /   \   / 
+  o-o     o-o  
+"""
+
+GRID35 = r"""
+  o-o     o-o     o-o
+ /   \   /   \   /   \
+o     o-o     o-o     o
+ \   /   \   /   \   /
+  o-o     o-o     o-o
+ /   \   /   \   /   \
+o     o-o     o-o     o
+ \   /   \   /   \   /
+  o-o     o-o     o-o
+ /   \   /   \   /   \
+o     o-o     o-o     o
+ \   /   \   /   \   /
+  o-o     o-o     o-o
+     \   /   \   /
+      o-o     o-o
+"""
+
+SIMPLE1 = r"""
+A-B
+| |
+A B
+"""
+
+SIMPLE2 = r"""
+A-B
+| |
+o-o
+| |
+A B
+"""
+
+MANY = r"""
+A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P-Q-R-S-T-U-V-W-X-Y-Z-a-b-c-d-e-f
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f
+"""
 
 #import console
 numpy.set_printoptions(linewidth=200)
@@ -209,7 +628,7 @@ def display_band_structure_1d(num_atoms, h_poly, cycles = 1, phase_offset = 0):
           matplotlib.pyplot.plot(x[0:100], y[i][100*cycle:100*(cycle+1)])
     # matplotlib.pyplot.show()
 
-def simple_display_energy_levels_0d(num_atoms, h_poly):
+def simple_display_energy_levels_0d(diagram, num_atoms, atoms, h_poly):
     """
     Display energy levels for 0d nano-structure.
     Also show eigenstates.
@@ -217,7 +636,7 @@ def simple_display_energy_levels_0d(num_atoms, h_poly):
     h = eval_hamiltonian(num_atoms, h_poly, (1, 1))
 
     e, v = eigensystem(h)
-    #print e
+    print e
 
     matplotlib.pyplot.scatter(num_atoms*[0], e, s = 20, marker = '_')
 
@@ -260,3 +679,51 @@ def display_energy_levels_0d(diagram, num_atoms, atoms, h_poly):
     matplotlib.pyplot.subplot(plot_rows, plot_cols, num_atoms+1)
     matplotlib.pyplot.scatter(num_atoms*[0], e, s = 0.1)
 
+def main():
+  #diagram = BEARDED_ZIGZAG2
+  #diagram = ZIGZAG2
+  #diagram = BEARDED_BEARDED5
+  diagram = MANY
+  b = 0#0.033*math.pi/2/4
+
+  num_atoms, dimension, bonds, atoms = parse_diagram(diagram)
+
+  print "dimension=", dimension
+
+  if dimension==2:
+      if 0:
+          n = 100
+          x = numpy.zeros((n, n), dtype = numpy.float64)
+          y = numpy.zeros((num_atoms, n, n), dtype = numpy.float64)
+          for k0 in range(-n/2, n/2):
+              for k1 in range(-n/2, n/2):
+                  alpha0 = 2*math.pi*k0/n
+                  alpha1 = 2*math.pi*k1/n
+                  phase0 = numpy.exp(alpha0*1j)
+                  phase1 = numpy.exp(alpha1*1j)
+                  h_minus, h_zero, h_plus = compute_hamiltonian(num_atoms, atoms, bonds)
+                  h = h_minus*phase.conjugate()+h_zero+h_plus*phase
+
+                  e, v = eigensystem(h)
+
+                  x.append(alpha)
+                  for i in range(num_atoms):
+                      y[i].append(e[i])
+
+          for i in range(num_atoms):
+              matplotlib.pyplot.plot(x, y[i], lod = True)
+          matplotlib.pyplot.show()
+
+  elif dimension == 1:
+    h_poly = compute_hamiltonian(num_atoms, atoms, bonds, b)
+    h = eval_hamiltonian(num_atoms, h_poly, (1, 1))
+    # print h
+    #sys.exit(1)
+    display_band_structure_1d(num_atoms, h_poly)
+
+  elif dimension==0:
+      h_poly = compute_hamiltonian(num_atoms, atoms, bonds)
+      display_energy_levels_0d(diagram, num_atoms, atoms, h_poly)
+
+if __name__ == "__main__":
+    main()
