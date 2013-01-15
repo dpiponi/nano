@@ -13,7 +13,7 @@ dy = units.nanometre
 
 num_atoms, dimension, bonds, atoms = parse_diagram(HEX_RIBBON)
 
-n = 64
+n = 1024
 x = numpy.zeros((n, num_atoms*num_atoms), dtype = numpy.float32)
 y = numpy.zeros((n, num_atoms*num_atoms), dtype = numpy.float32)
 for l in range(0, n):
