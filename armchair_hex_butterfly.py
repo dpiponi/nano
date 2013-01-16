@@ -47,4 +47,4 @@ for m in range(0, num_atoms*num_atoms):
     frame.axes.get_yaxis().set_visible(False)
 
 #matplotlib.pyplot.show()
-matplotlib.pyplot.savefig("zigzag_hex.1000.jpg", dpi = 1000)
+matplotlib.pyplot.savefig("armchair_hex.1000.jpg", dpi = 1000)
