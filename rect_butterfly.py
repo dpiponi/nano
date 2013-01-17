@@ -33,8 +33,13 @@ for l in range(0, n):
 
     y[l].sort()
 
+matplotlib.pyplot.figure(num=None, figsize=(8, 6), dpi=1000, facecolor='w', edgecolor='k')
 for m in range(0, num_atoms*num_atoms):
-    matplotlib.pyplot.plot(range(n), y[:, m], 'k', linewidth = 0.05)
+    matplotlib.pyplot.plot(range(n), y[:, m], 'k', linewidth = 0.25)
+    matplotlib.pyplot.axes(frameon=False)
 
-#matplotlib.pyplot.show()
-matplotlib.pyplot.savefig("rect.1000.jpg", dpi = 1000)
+frame = matplotlib.pyplot.gca()
+frame.axes.get_xaxis().set_visible(False)
+frame.axes.get_yaxis().set_visible(False)
+
+matplotlib.pyplot.savefig("rect.1000.jpg")
