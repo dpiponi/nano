@@ -337,32 +337,136 @@ def recurseBlack(n, z, p):
         s4 = recurseWhite(n-1, z, son_side(p, 4)[0])
         return [(z,p)]+[(down(z), p) for (z, p) in s3]+[(rot(down(z)), p) for (z, p) in s4]
 
-for i in xrange(1, 8):
-    points = recurseWhite(4, 0.0, (i, [1]))
-    r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
-    w_points = [(0, (0, []))]+[(r*down(z), p) for (z, p) in points]
+if 0:
+    for i in xrange(1, 8):
+        points = recurseWhite(4, 0.0, (i, [1]))
+        r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
+        w_points = [(0, (0, []))]+[(r*down(z), p) for (z, p) in points]
+        matplotlib.pyplot.scatter(
+            [w.real for (w, p) in w_points],
+            [w.imag for (w, p) in w_points],
+            marker = ','
+            )
+        for (w, p) in w_points:
+            matplotlib.pyplot.annotate(str(p), (w.real, w.imag), size = 'xx-small')
+
+#matplotlib.pyplot.show()
+
+def step((i, f), t, side):
+    ((i_new, f_new), bacl) = son_side((i, f), side)
+    def t_new(z):
+        return t(numpy.exp((side-3)*2*math.pi*1j/7)*down(z))
+    return ((i_new, f_new), t_new)
+
+def idn(z):
+    return z
+
+(p1, t1) = ((1, [1]), idn)
+(p2, t2) = step(p1, t1, 3)
+(p3, t3) = step(p2, t2, 3)
+(p4, t4) = step(p3, t3, 3)
+
+print t3(down(0))
+
+if 0:
+    def recurse_w(n, (p, t)):
+        if n==0:
+            print t(0)
+            return []
+        else:
+            return [(p, t)]+recurse_b(n-1, step(p, t, 2))+recurse_w(n-1, step(p, t, 3))+recurse_w(n-1, step(p, t, 4))
+
+    def recurse_b(n, (p, t)):
+        if n==0:
+            print t(0)
+            return []
+        else:
+            return [(p, t)]+recurse_b(n-1, step(p, t, 3))+recurse_w(n-1, step(p, t, 4))
+
+#zs = recurse_w(4, ((1, [1]), idn))
+
+if 0:
     matplotlib.pyplot.scatter(
-        [w.real for (w, p) in w_points],
-        [w.imag for (w, p) in w_points],
-        marker = ','
-        )
-    for (w, p) in w_points:
-        matplotlib.pyplot.annotate(str(p), (w.real, w.imag), size = 'xx-small')
+        [t(0).real for (p, t) in zs],
+        [t(0).imag for (p, t) in zs],
+        marker = ',')
 
-p1 = (1, [1])
-print p1
-p2 = son_side(p1, 2)[0]
-p3 = son_side(p1, 3)[0]
-p4 = son_side(p1, 4)[0]
-print p2, p3, p4
-p5 = son_side(p2, 3)[0]
-p6 = son_side(p2, 4)[0]
-p7 = son_side(p3, 2)[0]
-p8 = son_side(p3, 3)[0]
-p9 = son_side(p3, 4)[0]
-p10 = son_side(p4, 2)[0]
-p11 = son_side(p4, 3)[0]
-p12 = son_side(p4, 4)[0]
-print p5, p6, p7, p8, p9, p10, p11, p12
+    for (p, t) in zs:
+        matplotlib.pyplot.annotate(str(p), (t(0).real, t(0).imag), size = 'xx-small')
 
-matplotlib.pyplot.show()
+    matplotlib.lines.Line2D([0,0],[1,1])
+    matplotlib.pyplot.show()
+
+def psz(z):
+    print z.real, ' ', z.imag
+
+def line(p, q):
+    print 200+200*p.real, 200+200*p.imag, "moveto", 200+200*q.real, 200+200*q.imag, "lineto stroke"
+
+vertices = []
+vertex_map = {}
+
+def recurse_w(n, (p, t)):
+    if n==0:
+        vertex_map[p] = len(vertices)
+        vertices.append((p, t(0)))
+        w = step(p, t, 6)
+        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+        line(t(0), w[1](0))
+        return
+    else:
+        u = step(p, t, 2)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(t(0), u[1](0))
+        recurse_b(n-1, u)
+        v = step(p, t, 3)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(t(0), v[1](0))
+        recurse_w(n-1, v)
+        w = step(p, t, 4)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(t(0), w[1](0))
+        recurse_w(n-1, w)
+        x = step(p, t, 5)
+        print "0 0 0 setgray 1.5 setlinewidth"
+        line(t(0), x[1](0))
+        x = step(p, t, 6)
+        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+        line(t(0), x[1](0))
+
+def recurse_b(n, (p, t)):
+    if n==0:
+        vertex_map[p] = len(vertices)
+        vertices.append((p, t(0)))
+        w = step(p, t, 6)
+        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+        line(t(0), w[1](0))
+        return
+    else:
+        u = step(p, t, 3)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(t(0), u[1](0))
+        recurse_b(n-1, u)
+        v = step(p, t, 4)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(t(0), v[1](0))
+        recurse_w(n-1, v)
+        w = step(p, t, 5)
+        print "0 0 0 setgray 1.5 setlinewidth"
+        line(t(0), w[1](0))
+        w = step(p, t, 6)
+        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+        line(t(0), w[1](0))
+
+for i in xrange(1, 8):
+    vertex_map[(0, [])] = len(vertices)
+    vertices.append(((0, []), 0))
+    q = numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(0)
+    print "0 0 0 setgray 0.5 setlinewidth"
+    line(0, q)
+    recurse_w(2, ((i, [1]), lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)))
+    #r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
+    #w_points = [(0, (0, []))]+[(r*down(z), p) for (z, p) in points]
+
+print "showpage"
+print vertices
