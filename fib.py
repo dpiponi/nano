@@ -516,7 +516,7 @@ for i in xrange(1, 8):
     q = numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(0)
     print "0 0 0 setgray 0.5 setlinewidth"
     line(0, q)
-    recurse_w(1, ((i, (1,)), lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)))
+    recurse_w(2, ((i, (1,)), lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)))
     add_edge((((0, ()), 0.0), ((i, (1,)), q)))
     add_face(((0, ()), 0.0), ((i, (1,)), circ(i)), ((mod7(i+1), (1,)), circ(i+1)))
     #r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
