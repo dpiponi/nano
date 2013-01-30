@@ -410,130 +410,253 @@ edge_map = {}
 faces = []
 face_map = {}
 
-def add_vertex((p, z)):
-    if not p in vertex_map:
-        vertex_map[p] = len(vertices)
-        vertices.append((p, z))
+def compute_rectangular():
+    n = 20
+    for i in xrange(0, n):
+        for j in xrange(0, n):
+            vertex_map[(i, j)] = len(vertices)
+            vertices.append((i, j))
+    for i in xrange(0, n):
+        for j in xrange(0, n):
+            if i+1 < n:
+                v0 = vertex_map[(i, j)]
+                v1 = vertex_map[(i+1, j)]
+                edge_map[(v0, v1)] = len(edges)
+                edges.append((v0, v1))
 
-def add_edge(((p, w), (q, z))):
-    add_vertex((p, w))
-    add_vertex((q, z))
-    if not (vertex_map[p], vertex_map[q]) in edge_map:
-        edge_map[(vertex_map[p], vertex_map[q])] = len(edges)
-        edges.append((vertex_map[p], vertex_map[q]))
+def compute_heptagonal():
+    def add_vertex((p, z)):
+        if not p in vertex_map:
+            vertex_map[p] = len(vertices)
+            vertices.append((p, z))
 
-def add_face((p, x), (q, y), (r, z)):
-    add_vertex((p, x))
-    add_vertex((q, y))
-    add_vertex((r, z))
-    if not (p, q, r) in edge_map:
-        face_map[(vertex_map[p], vertex_map[q], vertex_map[r])] = len(faces)
-        faces.append((vertex_map[p], vertex_map[q], vertex_map[r]))
-    y = y(0)
-    z = z(0)
-    r = 0.333333*(x+y+z)
-    print 200+200*r.real, 200+200*r.imag, "moveto"
-    print "0.5 0.5 0.5 setgray 0.5 setlinewidth"
-    print "-1 -1 rmoveto 2 0 rlineto 0 2 rlineto -2 0 rlineto 0 -2 rlineto stroke"
+    def add_edge(((p, w), (q, z))):
+        add_vertex((p, w))
+        add_vertex((q, z))
+        if not (vertex_map[p], vertex_map[q]) in edge_map:
+            edge_map[(vertex_map[p], vertex_map[q])] = len(edges)
+            edges.append((vertex_map[p], vertex_map[q]))
 
-def recurse_w(n, (p, t)):
-    add_vertex((p, t(0)))
-    if n==0:
-        w = step(p, t, 6)
-        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
-        line(t(0), w[1](0))
-        add_edge(((p, t(0)), w))
-        return
+    def add_face((p, x), (q, y), (r, z)):
+        add_vertex((p, x))
+        add_vertex((q, y))
+        add_vertex((r, z))
+        if not (p, q, r) in edge_map:
+            face_map[(vertex_map[p], vertex_map[q], vertex_map[r])] = len(faces)
+            faces.append((vertex_map[p], vertex_map[q], vertex_map[r]))
+        y = y(0) # XXX TODO DEAL WITH THIS!
+        z = z(0)
+        r = 0.333333*(x+y+z)
+        print 200+200*r.real, 200+200*r.imag, "moveto"
+        print "0.5 0.5 0.5 setgray 0.5 setlinewidth"
+        print "-1 -1 rmoveto 2 0 rlineto 0 2 rlineto -2 0 rlineto 0 -2 rlineto stroke"
+
+    def recurse_w(n, (p, t)):
+        add_vertex((p, t(0)))
+        if n==0:
+            w = step(p, t, 6)
+            print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+            line(t(0), w[1](0))
+            add_edge(((p, t(0)), w))
+            return
+        else:
+            u = step(p, t, 2)
+            print "0 0 0 setgray 0.5 setlinewidth"
+            line(t(0), u[1](0))
+            recurse_b(n-1, u)
+            add_edge(((p, t(0)), u))
+            v = step(p, t, 3)
+            print "0 0 0 setgray 0.5 setlinewidth"
+            line(t(0), v[1](0))
+            recurse_w(n-1, v)
+            add_edge(((p, t(0)), v))
+            add_face((p, t(0)), u, v)
+            w = step(p, t, 4)
+            print "0 0 0 setgray 0.5 setlinewidth"
+            line(t(0), w[1](0))
+            recurse_w(n-1, w)
+            add_edge(((p, t(0)), w))
+            add_face((p, t(0)), v, w)
+            x = step(p, t, 5)
+            print "0 0 0 setgray 1.5 setlinewidth"
+            line(t(0), x[1](0))
+            add_edge(((p, t(0)), x))
+            add_face((p, t(0)), w, x)
+            y = step(p, t, 6)
+            print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+            print "% Adding gray edge"
+            line(t(0), y[1](0))
+            add_edge(((p, t(0)), y))
+            add_face((p, t(0)), x, y)
+
+    def recurse_b(n, (p, t)):
+        add_vertex((p, t(0)))
+        if n==0:
+            w = step(p, t, 6)
+            print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+            line(t(0), w[1](0))
+            add_edge(((p, t(0)), w))
+            return
+        else:
+            u = step(p, t, 3)
+            print "0 0 0 setgray 0.5 setlinewidth"
+            line(t(0), u[1](0))
+            recurse_b(n-1, u)
+            add_edge(((p, t(0)), u))
+            v = step(p, t, 4)
+            print "0 0 0 setgray 0.5 setlinewidth"
+            line(t(0), v[1](0))
+            recurse_w(n-1, v)
+            add_edge(((p, t(0)), v))
+            add_face((p, t(0)), u, v)
+            w = step(p, t, 5)
+            print "0 0 0 setgray 1.5 setlinewidth"
+            line(t(0), w[1](0))
+            add_edge(((p, t(0)), w))
+            add_face((p, t(0)), v, w)
+            x = step(p, t, 6)
+            print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
+            print "% Adding gray edge"
+            line(t(0), x[1](0))
+            add_edge(((p, t(0)), x))
+            add_face((p, t(0)), w, x)
+
+    vertex_map[(0, ())] = len(vertices)
+    vertices.append(((0, ()), 0))
+
+    def circ(i):
+        return lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)
+
+    for i in xrange(1, 8):
+        q = numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(0)
+        print "0 0 0 setgray 0.5 setlinewidth"
+        line(0, q)
+        recurse_w(recursion_level, ((i, (1,)), lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)))
+        add_edge((((0, ()), 0.0), ((i, (1,)), q)))
+        add_face(((0, ()), 0.0), ((i, (1,)), circ(i)), ((mod7(i+1), (1,)), circ(i+1)))
+        #r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
+        #w_points = [(0, (0, []))]+[(r*down(z), p) for (z, p) in points]
+
+    print "showpage"
+    print '% v =',len(vertices)
+    print '%',len(vertex_map)
+    print '% e =',len(edges)
+    print '%',len(edge_map)
+    print '%f =',len(faces)
+    print '%',len(face_map)
+
+    global v, e, f
+    v = len(vertices)
+    e = len(edges)
+    f = len(faces)
+
+    euler = v-e+f
+
+    print '% euler =', euler
+
+def edge_entry((v0, v1)):
+    if (v0, v1) in edge_map:
+        return (1, edge_map[(v0, v1)])
+    elif (v1, v0) in edge_map:
+        return (-1, edge_map[(v1, v0)])
     else:
-        u = step(p, t, 2)
-        print "0 0 0 setgray 0.5 setlinewidth"
-        line(t(0), u[1](0))
-        recurse_b(n-1, u)
-        add_edge(((p, t(0)), u))
-        v = step(p, t, 3)
-        print "0 0 0 setgray 0.5 setlinewidth"
-        line(t(0), v[1](0))
-        recurse_w(n-1, v)
-        add_edge(((p, t(0)), v))
-        add_face((p, t(0)), u, v)
-        w = step(p, t, 4)
-        print "0 0 0 setgray 0.5 setlinewidth"
-        line(t(0), w[1](0))
-        recurse_w(n-1, w)
-        add_edge(((p, t(0)), w))
-        add_face((p, t(0)), v, w)
-        x = step(p, t, 5)
-        print "0 0 0 setgray 1.5 setlinewidth"
-        line(t(0), x[1](0))
-        add_edge(((p, t(0)), x))
-        add_face((p, t(0)), w, x)
-        y = step(p, t, 6)
-        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
-        print "% Adding gray edge"
-        line(t(0), y[1](0))
-        add_edge(((p, t(0)), y))
-        add_face((p, t(0)), x, y)
+        raise "Missing edge"
 
-def recurse_b(n, (p, t)):
-    add_vertex((p, t(0)))
-    if n==0:
-        w = step(p, t, 6)
-        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
-        line(t(0), w[1](0))
-        add_edge(((p, t(0)), w))
-        return
-    else:
-        u = step(p, t, 3)
-        print "0 0 0 setgray 0.5 setlinewidth"
-        line(t(0), u[1](0))
-        recurse_b(n-1, u)
-        add_edge(((p, t(0)), u))
-        v = step(p, t, 4)
-        print "0 0 0 setgray 0.5 setlinewidth"
-        line(t(0), v[1](0))
-        recurse_w(n-1, v)
-        add_edge(((p, t(0)), v))
-        add_face((p, t(0)), u, v)
-        w = step(p, t, 5)
-        print "0 0 0 setgray 1.5 setlinewidth"
-        line(t(0), w[1](0))
-        add_edge(((p, t(0)), w))
-        add_face((p, t(0)), v, w)
-        x = step(p, t, 6)
-        print "0.5 0.5 0.5 setgray 1.5 setlinewidth"
-        print "% Adding gray edge"
-        line(t(0), x[1](0))
-        add_edge(((p, t(0)), x))
-        add_face((p, t(0)), w, x)
+recursion_level = 5
+compute_heptagonal()
 
-vertex_map[(0, ())] = len(vertices)
-vertices.append(((0, ()), 0))
+e_to_f = numpy.zeros((f, e), dtype = numpy.float32)
+#print "edges=",edges
+for face in faces:
+    #print "==="
+    #print face
+    v0 = face[0]
+    v1 = face[1]
+    v2 = face[2]
+    #print v0, v1, v2
+    edge0 = (v0, v1)
+    edge1 = (v1, v2)
+    edge2 = (v0, v2)
+    #print edge0, edge1, edge2
+    e0 = edge_entry(edge0)
+    e1 = edge_entry(edge1)
+    e2 = edge_entry(edge2)
+    #print e0, e1, e2
+    fi = face_map[face]
+    e_to_f[fi, e0[1]] = e0[0]
+    e_to_f[fi, e1[1]] = e1[0]
+    e_to_f[fi, e2[1]] = e2[0]
 
-def circ(i):
-    return lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)
+numpy.set_printoptions(threshold = 1000000, linewidth = 150)
+#print e_to_f
+#(u, s, v) = numpy.linalg.svd(e_to_f)
+#print len(s),':',s
+o = numpy.ones((f), dtype = numpy.float32)
+print o
+(x, residues, rank, s) = numpy.linalg.lstsq(e_to_f, o)
+print "x=",x
+print "residues=",residues
+print "rank=",rank
+print "s=",s
+print "lenx=",len(x)
 
-for i in xrange(1, 8):
-    q = numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(0)
-    print "0 0 0 setgray 0.5 setlinewidth"
-    line(0, q)
-    recurse_w(2, ((i, (1,)), lambda z:numpy.exp(2*math.pi*1j*(i+3.5)/7)*down(z)))
-    add_edge((((0, ()), 0.0), ((i, (1,)), q)))
-    add_face(((0, ()), 0.0), ((i, (1,)), circ(i)), ((mod7(i+1), (1,)), circ(i+1)))
-    #r = numpy.exp(2*math.pi*1j*(i+3.5)/7)
-    #w_points = [(0, (0, []))]+[(r*down(z), p) for (z, p) in points]
+for face in faces:
+    v0 = face[0]
+    v1 = face[1]
+    v2 = face[2]
+    #print v0, v1, v2
+    edge0 = (v0, v1)
+    edge1 = (v1, v2)
+    edge2 = (v0, v2)
+    #print edge0, edge1, edge2
+    e0 = edge_entry(edge0)
+    e1 = edge_entry(edge1)
+    e2 = edge_entry(edge2)
+    (p, q, r) = (e0[0]*x[e0[1]], e1[0]*x[e1[1]], e2[0]*x[e2[1]])
+    print p, q, r, '=', p+q+r
 
-print "showpage"
-print '%',len(vertices)
-print '%',len(vertex_map)
-print '%',len(edges)
-print '%',len(edge_map)
-print '%',len(faces)
-print '%',len(face_map)
+adj = numpy.zeros((v, v), dtype = numpy.float32)
+conn = numpy.zeros((v, v), dtype = numpy.float32)
+for (v0, v1) in edges:
+    e = edge_map[(v0, v1)]
+    conn[v0, v1] = x[e]
+    conn[v1, v0] = -x[e]
+    adj[v0, v1] = 1
+    adj[v1, v0] = 1
 
-v = len(vertices)
-e = len(edges)
-f = len(faces)
+# From penrose.py
+n = v # num vertices
+m = 128
+b = 2*math.pi
 
-euler = v-e+f
+if 0:
+    es = numpy.zeros((n, m), dtype = numpy.float32)
 
-print '% euler =', euler
+    h = numpy.zeros((n, n), dtype = numpy.complex64)
+
+    for k in xrange(0, m):
+        print m-k
+
+        h = adj*numpy.exp(b*k/m*conn*1j)
+
+        e = numpy.real(numpy.linalg.eigvals(h))
+        e.sort()
+        es[:, k] = e
+
+    numpy.save('fib.%d.%d.%f.npy' % (recursion_level, m, b), es)
+else:
+    es = numpy.load('fib.%d.%d.%f.npy' % (recursion_level, m, b))
+
+matplotlib.pyplot.figure(num=None, figsize=(18, 12), dpi=72, facecolor='w', edgecolor='k')
+for i in xrange(0, n):
+    matplotlib.pyplot.plot(xrange(0, m), es[i, :], 'k', linewidth = 0.2)
+    matplotlib.pyplot.plot(xrange(-m+1, 1), es[i, ::-1], 'k', linewidth = 0.2)
+    matplotlib.pyplot.axes(frameon=False)
+
+frame = matplotlib.pyplot.gca()
+frame.axes.get_xaxis().set_visible(False)
+frame.axes.get_yaxis().set_visible(False)
+
+#print "saving"
+#matplotlib.pyplot.savefig("fib.jpg")
+matplotlib.pyplot.show()

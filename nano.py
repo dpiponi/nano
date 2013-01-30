@@ -33,7 +33,7 @@ bond_types = {
     '|' : (1.0, vec(-1, 0), vec(1, 0))
 }
 
-def parse_diagram(diagram, dimension_hint = None, joins = ''):
+def parse_diagram(diagram, dimension_hint = None, joins = '', bond_types = bond_types):
     """
     Convert diagram into lists of bonds and atoms.
 
