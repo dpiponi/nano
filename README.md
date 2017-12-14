@@ -15,7 +15,7 @@ That was created by drawing this ASCII art
      \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /    
       A B     C D     E B     G H     I J     K L     M N     O P     Q R     S T     U V     W X     Y Z     a b    
 
-That is used to represent an infinite hexagonal lattice. The letters A-Z are used to indicate identified points so the above represents the infinite lattice
+That is used to represent an infinite hexagonal lattice. The letters A-Z are used to indicate identified points so the above represents the infinite (in vertical extent) lattice
 
        \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /  
         o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     o-o     a-b  
