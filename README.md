@@ -30,3 +30,5 @@ That is used to represent an infinite hexagonal lattice. The letters A-Z are use
        /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \   /   \ 
 
 See [Hofstadter's butterfly](https://en.wikipedia.org/wiki/Hofstadter%27s_butterfly) for my original motivation for this project.
+
+It's fairly flexible. For example it had no trouble reproducing the energy levels for the graphene spirals in [this paper](https://arxiv.org/abs/1301.2226).
