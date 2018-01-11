@@ -4,7 +4,7 @@ nano
 Some tools to compute energy levels for atomic structures drawn with ASCII art
 
 Status
-======
+------
 This is a complete working project. I'm probably not going to do much future development on it.
 
 For example, if you run `butterfly.py` it stores a (high resolution version of) this image in `hex.1000.jpg`:
